@@ -3,20 +3,14 @@ package com.stephen.popcorn.controller;
 import cn.hutool.core.io.FileUtil;
 import com.stephen.popcorn.common.BaseResponse;
 import com.stephen.popcorn.common.ErrorCode;
-import com.stephen.popcorn.utils.ResultUtils;
-import com.stephen.popcorn.constants.FileConstant;
+import com.stephen.popcorn.constant.FileConstant;
 import com.stephen.popcorn.exception.BusinessException;
 import com.stephen.popcorn.manager.CosManager;
 import com.stephen.popcorn.model.dto.file.UploadFileRequest;
 import com.stephen.popcorn.model.entity.User;
 import com.stephen.popcorn.model.enums.FileUploadBizEnum;
 import com.stephen.popcorn.service.UserService;
-
-import java.io.File;
-import java.util.Arrays;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.stephen.popcorn.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.Arrays;
 
 /**
  * 文件接口

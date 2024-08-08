@@ -5,38 +5,28 @@ import com.stephen.popcorn.annotation.AuthCheck;
 import com.stephen.popcorn.common.BaseResponse;
 import com.stephen.popcorn.common.DeleteRequest;
 import com.stephen.popcorn.common.ErrorCode;
-import com.stephen.popcorn.utils.ResultUtils;
-import com.stephen.popcorn.constants.UserConstant;
+import com.stephen.popcorn.constant.UserConstant;
 import com.stephen.popcorn.exception.BusinessException;
-import com.stephen.popcorn.utils.ThrowUtils;
-import com.stephen.popcorn.model.dto.user.UserAddRequest;
-import com.stephen.popcorn.model.dto.user.UserLoginRequest;
-import com.stephen.popcorn.model.dto.user.UserQueryRequest;
-import com.stephen.popcorn.model.dto.user.UserRegisterRequest;
-import com.stephen.popcorn.model.dto.user.UserUpdateMyRequest;
-import com.stephen.popcorn.model.dto.user.UserUpdateRequest;
+import com.stephen.popcorn.model.dto.user.*;
 import com.stephen.popcorn.model.entity.User;
 import com.stephen.popcorn.model.vo.LoginUserVO;
 import com.stephen.popcorn.model.vo.UserVO;
 import com.stephen.popcorn.service.UserService;
-
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.stephen.popcorn.utils.ResultUtils;
+import com.stephen.popcorn.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.stephen.popcorn.constants.SaltConstant.SALT;
-import static com.stephen.popcorn.constants.UserConstant.DEFAULT_PASSWORD;
-import static com.stephen.popcorn.constants.UserConstant.USER_AVATAR;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+import static com.stephen.popcorn.constant.SaltConstant.SALT;
+import static com.stephen.popcorn.constant.UserConstant.DEFAULT_PASSWORD;
+import static com.stephen.popcorn.constant.UserConstant.USER_AVATAR;
 
 
 /**

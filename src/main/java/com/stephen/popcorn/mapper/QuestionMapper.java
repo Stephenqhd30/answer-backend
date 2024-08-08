@@ -1,7 +1,7 @@
 package com.stephen.popcorn.mapper;
 
-import com.stephen.popcorn.model.entity.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.stephen.popcorn.model.entity.Question;
 
 /**
 * @author stephen qiu

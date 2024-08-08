@@ -1,8 +1,8 @@
 package com.stephen.popcorn.common;
 
-import java.io.Serializable;
-
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 通用返回类

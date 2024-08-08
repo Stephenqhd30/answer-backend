@@ -1,11 +1,11 @@
 package com.stephen.popcorn.model.enums;
 
+import lombok.Getter;
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import lombok.Getter;
-import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * 文件上传业务类型枚举

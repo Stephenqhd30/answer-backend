@@ -1,4 +1,4 @@
-package com.stephen.popcorn.constants;
+package com.stephen.popcorn.constant;
 
 /**
  * @author: stephen qiu

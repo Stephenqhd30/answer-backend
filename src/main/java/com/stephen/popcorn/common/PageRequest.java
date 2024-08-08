@@ -1,6 +1,6 @@
 package com.stephen.popcorn.common;
 
-import com.stephen.popcorn.constants.CommonConstant;
+import com.stephen.popcorn.constant.CommonConstant;
 import lombok.Data;
 
 /**

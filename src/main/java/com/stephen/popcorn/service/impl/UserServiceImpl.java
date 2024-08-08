@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.stephen.popcorn.common.ErrorCode;
-import com.stephen.popcorn.constants.CommonConstant;
+import com.stephen.popcorn.constant.CommonConstant;
 import com.stephen.popcorn.exception.BusinessException;
 import com.stephen.popcorn.mapper.UserMapper;
 import com.stephen.popcorn.model.dto.user.UserQueryRequest;
@@ -15,7 +15,6 @@ import com.stephen.popcorn.model.vo.UserVO;
 import com.stephen.popcorn.service.UserService;
 import com.stephen.popcorn.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.stephen.popcorn.constants.SaltConstant.SALT;
-import static com.stephen.popcorn.constants.UserConstant.USER_AVATAR;
-import static com.stephen.popcorn.constants.UserConstant.USER_LOGIN_STATE;
+import static com.stephen.popcorn.constant.SaltConstant.SALT;
+import static com.stephen.popcorn.constant.UserConstant.USER_AVATAR;
+import static com.stephen.popcorn.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务实现
@@ -106,38 +105,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 		// 3. 记录用户的登录态
 		request.getSession().setAttribute(USER_LOGIN_STATE, user);
 		return this.getLoginUserVO(user);
-	}
-	
-	@Override
-	public LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request) {
-		String unionId = wxOAuth2UserInfo.getUnionId();
-		String mpOpenId = wxOAuth2UserInfo.getOpenid();
-		// 单机锁
-		synchronized (unionId.intern()) {
-			// 查询用户是否已存在
-			QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-			queryWrapper.eq("unionId", unionId);
-			User user = this.getOne(queryWrapper);
-			// 被封号，禁止登录
-			if (user != null && UserRoleEnum.BAN.getValue().equals(user.getUserRole())) {
-				throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "该用户已被封，禁止登录");
-			}
-			// 用户不存在则创建
-			if (user == null) {
-				user = new User();
-				user.setUnionId(unionId);
-				user.setMpOpenId(mpOpenId);
-				user.setUserAvatar(wxOAuth2UserInfo.getHeadImgUrl());
-				user.setUserName(wxOAuth2UserInfo.getNickname());
-				boolean result = this.save(user);
-				if (!result) {
-					throw new BusinessException(ErrorCode.SYSTEM_ERROR, "登录失败");
-				}
-			}
-			// 记录用户的登录态
-			request.getSession().setAttribute(USER_LOGIN_STATE, user);
-			return getLoginUserVO(user);
-		}
 	}
 	
 	/**
