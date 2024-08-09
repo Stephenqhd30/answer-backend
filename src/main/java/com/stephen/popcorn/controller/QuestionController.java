@@ -8,7 +8,10 @@ import com.stephen.popcorn.common.DeleteRequest;
 import com.stephen.popcorn.common.ErrorCode;
 import com.stephen.popcorn.constant.UserConstant;
 import com.stephen.popcorn.exception.BusinessException;
-import com.stephen.popcorn.model.dto.question.*;
+import com.stephen.popcorn.model.dto.question.QuestionAddRequest;
+import com.stephen.popcorn.model.dto.question.QuestionEditRequest;
+import com.stephen.popcorn.model.dto.question.QuestionQueryRequest;
+import com.stephen.popcorn.model.dto.question.QuestionUpdateRequest;
 import com.stephen.popcorn.model.entity.Question;
 import com.stephen.popcorn.model.entity.User;
 import com.stephen.popcorn.model.vo.QuestionVO;
@@ -22,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 题目接口

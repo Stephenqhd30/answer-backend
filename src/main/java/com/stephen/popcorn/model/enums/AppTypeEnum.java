@@ -13,7 +13,7 @@ import org.apache.commons.lang3.ObjectUtils;
 public enum AppTypeEnum {
 	
 	
-	POINT("得分类", 0),
+	SCORE("得分类", 0),
 	TEST("测评类", 1);
 	
 	private final String text;

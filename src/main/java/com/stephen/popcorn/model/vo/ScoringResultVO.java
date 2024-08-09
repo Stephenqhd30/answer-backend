@@ -1,9 +1,6 @@
 package com.stephen.popcorn.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.stephen.popcorn.model.entity.ScoringResult;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

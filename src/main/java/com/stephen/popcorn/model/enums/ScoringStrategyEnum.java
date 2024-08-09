@@ -12,8 +12,8 @@ import org.apache.commons.lang3.ObjectUtils;
 @Getter
 public enum ScoringStrategyEnum {
 	
-	REVIEWING("自定义", 0),
-	PASS("AI", 1);
+	CUSTOM("自定义", 0),
+	AI("AI", 1);
 	private final String text;
 	
 	private final int value;
