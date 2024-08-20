@@ -173,6 +173,7 @@ public class AppController {
 	                                                 HttpServletRequest request) {
 		long current = appQueryRequest.getCurrent();
 		long size = appQueryRequest.getPageSize();
+		appQueryRequest.setReviewStatus(ReviewStatusEnum.PASS.getValue());
 		// 限制爬虫
 		ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
 		// 查询数据库
@@ -258,6 +259,7 @@ public class AppController {
 		// 取出来请求中需要的属性
 		Long id = reviewRequest.getId();
 		Integer reviewStatus = reviewRequest.getReviewStatus();
+		String reviewMessage = reviewRequest.getReviewMessage();
 		ReviewStatusEnum reviewStatusEnum = ReviewStatusEnum.getEnumByValue(reviewStatus);
 		
 		// 校验
@@ -272,12 +274,12 @@ public class AppController {
 		App app = new App();
 		app.setId(id);
 		app.setReviewStatus(reviewStatus);
+		app.setReviewMessage(reviewMessage);
 		app.setReviewerId(loginUser.getId());
 		app.setReviewTime(new Date());
 		boolean result = appService.updateById(app);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
 		return ResultUtils.success(true);
-		
 	}
 	
 }

@@ -9,9 +9,9 @@ import java.util.Date;
 /**
  * 评分结果
  * @author stephen qiu
- * @TableName scoringResult
+ * @TableName scoring_result
  */
-@TableName(value ="scoringResult")
+@TableName(value ="scoring_result")
 @Data
 public class ScoringResult implements Serializable {
     /**

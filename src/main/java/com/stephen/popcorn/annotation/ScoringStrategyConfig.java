@@ -28,5 +28,4 @@ public @interface ScoringStrategyConfig {
 	 */
 	int scoringStrategy();
 	
-	
 }

@@ -8,6 +8,7 @@ import com.stephen.popcorn.model.entity.App;
 import com.stephen.popcorn.model.entity.Question;
 import com.stephen.popcorn.model.entity.ScoringResult;
 import com.stephen.popcorn.model.entity.UserAnswer;
+import com.stephen.popcorn.model.enums.AppTypeEnum;
 import com.stephen.popcorn.model.vo.QuestionVO;
 import com.stephen.popcorn.service.QuestionService;
 import com.stephen.popcorn.service.ScoringResultService;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 自定义测评类应用评分策略
+ * 自定义评分类应用评分策略
  *
  * @author: stephen qiu
  * @create: 2024-08-09 15:12
@@ -48,6 +49,10 @@ public class CustomScoreScoringStrategy implements ScoringStrategy {
 		List<QuestionContentDTO> questionContent = questionVO.getQuestionContent();
 		// 遍历题目列表
 		for (QuestionContentDTO questionContentDTO : questionContent) {
+			// 如果选项列表为空，跳过当前循环
+			if (questionContentDTO.getQuestionOptionList() == null) {
+				continue;
+			}
 			// 遍历答案列表
 			for (String answer : choices) {
 				// 遍历题目中的选项

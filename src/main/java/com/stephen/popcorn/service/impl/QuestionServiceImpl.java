@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,9 +67,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 		}
 		// 修改数据时，有参数则校验
 		// todo 补充校验规则
-		if (StringUtils.isNotBlank(questionContent)) {
-			ThrowUtils.throwIf(questionContent.length() > 80, ErrorCode.PARAMS_ERROR, "标题过长");
-		}
 		if (appId != null) {
 			App app = appService.getById(appId);
 			ThrowUtils.throwIf(app == null, ErrorCode.PARAMS_ERROR, "应用不存在");

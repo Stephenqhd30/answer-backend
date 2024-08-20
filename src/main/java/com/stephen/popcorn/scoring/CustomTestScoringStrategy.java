@@ -56,6 +56,10 @@ public class CustomTestScoringStrategy implements ScoringStrategy {
 		List<QuestionContentDTO> questionContent = questionVO.getQuestionContent();
 		// 遍历题目列表
 		for (QuestionContentDTO questionContentDTO : questionContent) {
+			// 如果选项列表为空，跳过当前循环
+			if (questionContentDTO.getQuestionOptionList() == null) {
+				continue;
+			}
 			// 遍历答案列表
 			for (String answer : choices) {
 				// 遍历题目中的选项

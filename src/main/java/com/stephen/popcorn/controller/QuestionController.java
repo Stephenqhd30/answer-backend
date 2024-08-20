@@ -47,9 +47,9 @@ public class QuestionController {
     /**
      * 创建题目
      *
-     * @param questionAddRequest
-     * @param request
-     * @return
+     * @param questionAddRequest questionAddRequest
+     * @param request request
+     * @return BaseResponse<Long>
      */
     @PostMapping("/add")
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
@@ -57,6 +57,7 @@ public class QuestionController {
         // TODO 在此处将实体类和 DTO 进行转换
         Question question = new Question();
         BeanUtils.copyProperties(questionAddRequest, question);
+        question.setQuestionContent(JSONUtil.toJsonStr(questionAddRequest.getQuestionContent()));
         // 数据校验
         questionService.validQuestion(question, true);
         // TODO 填充默认值

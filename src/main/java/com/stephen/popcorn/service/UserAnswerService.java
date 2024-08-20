@@ -19,8 +19,8 @@ public interface UserAnswerService extends IService<UserAnswer> {
     /**
      * 校验数据
      *
-     * @param userAnswer
-     * @param add 对创建的数据进行校验
+     * @param userAnswer userAnswer
+     * @param add 是否添加
      */
     void validUserAnswer(UserAnswer userAnswer, boolean add);
 

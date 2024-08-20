@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * 题目
+ * @author stephen qiu
  * @TableName question
  */
 @TableName(value ="question")

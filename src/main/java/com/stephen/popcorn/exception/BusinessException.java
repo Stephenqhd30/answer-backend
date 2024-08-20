@@ -1,14 +1,17 @@
 package com.stephen.popcorn.exception;
 
 import com.stephen.popcorn.common.ErrorCode;
+import lombok.Getter;
 
 /**
  * 自定义异常类
  *
  * @author stephen qiu
  */
+@Getter
 public class BusinessException extends RuntimeException {
 	
+	private static final long serialVersionUID = 2752467208182332798L;
 	/**
 	 * 错误码
 	 */
@@ -29,7 +32,4 @@ public class BusinessException extends RuntimeException {
 		this.code = errorCode.getCode();
 	}
 	
-	public int getCode() {
-		return code;
-	}
 }
