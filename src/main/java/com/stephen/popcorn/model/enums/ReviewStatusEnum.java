@@ -3,6 +3,8 @@ package com.stephen.popcorn.model.enums;
 import lombok.Getter;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.Objects;
+
 /**
  * 审核状态枚举类
  * 审核状态：0-待审核, 1-通过, 2-拒绝
@@ -17,9 +19,9 @@ public enum ReviewStatusEnum {
 	REJECT("拒绝", 2);
 	private final String text;
 	
-	private final int value;
+	private final Integer value;
 	
-	ReviewStatusEnum(String text, int value) {
+	ReviewStatusEnum(String text, Integer value) {
 		this.text = text;
 		this.value = value;
 	}
@@ -30,12 +32,12 @@ public enum ReviewStatusEnum {
 	 * @param value
 	 * @return
 	 */
-	public static ReviewStatusEnum getEnumByValue(int value) {
+	public static ReviewStatusEnum getEnumByValue(Integer value) {
 		if (ObjectUtils.isEmpty(value)) {
 			return null;
 		}
 		for (ReviewStatusEnum reviewStatusEnum : ReviewStatusEnum.values()) {
-			if (reviewStatusEnum.value == value) {
+			if (Objects.equals(reviewStatusEnum.value, value)) {
 				return reviewStatusEnum;
 			}
 		}

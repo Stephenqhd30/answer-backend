@@ -3,6 +3,8 @@ package com.stephen.popcorn.model.enums;
 import lombok.Getter;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.Objects;
+
 /**
  * 应用类型枚举类
  * 应用类型（0-得分类，1-测评类）
@@ -18,9 +20,9 @@ public enum AppTypeEnum {
 	
 	private final String text;
 	
-	private final int value;
+	private final Integer value;
 	
-	AppTypeEnum(String text, int value) {
+	AppTypeEnum(String text, Integer value) {
 		this.text = text;
 		this.value = value;
 	}
@@ -31,12 +33,12 @@ public enum AppTypeEnum {
 	 * @param value
 	 * @return
 	 */
-	public static AppTypeEnum getEnumByValue(int value) {
+	public static AppTypeEnum getEnumByValue(Integer value) {
 		if (ObjectUtils.isEmpty(value)) {
 			return null;
 		}
 		for (AppTypeEnum appTypeEnum : AppTypeEnum.values()) {
-			if (appTypeEnum.value == value) {
+			if (Objects.equals(appTypeEnum.value, value)) {
 				return appTypeEnum;
 			}
 		}
