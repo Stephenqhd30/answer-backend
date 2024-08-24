@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * 应用
+ * @author stephen qiu
  * @TableName app
  */
 @TableName(value ="app")

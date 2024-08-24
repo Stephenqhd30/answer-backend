@@ -22,6 +22,7 @@ import com.stephen.popcorn.utils.ResultUtils;
 import com.stephen.popcorn.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -49,11 +50,12 @@ public class AppController {
 	/**
 	 * 创建应用
 	 *
-	 * @param appAddRequest
-	 * @param request
-	 * @return
+	 * @param appAddRequest appAddRequest
+	 * @param request       request
+	 * @return BaseResponse<Long>
 	 */
 	@PostMapping("/add")
+	@Transactional(rollbackFor = Exception.class)
 	public BaseResponse<Long> addApp(@RequestBody AppAddRequest appAddRequest, HttpServletRequest request) {
 		ThrowUtils.throwIf(appAddRequest == null, ErrorCode.PARAMS_ERROR);
 		// todo  在此处将实体类和 DTO 进行转换
@@ -77,11 +79,12 @@ public class AppController {
 	/**
 	 * 删除应用
 	 *
-	 * @param deleteRequest
-	 * @param request
-	 * @return
+	 * @param deleteRequest deleteRequest
+	 * @param request       request
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/delete")
+	@Transactional(rollbackFor = Exception.class)
 	public BaseResponse<Boolean> deleteApp(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
 		if (deleteRequest == null || deleteRequest.getId() <= 0) {
 			throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -104,11 +107,12 @@ public class AppController {
 	/**
 	 * 更新应用（仅管理员可用）
 	 *
-	 * @param appUpdateRequest
-	 * @return
+	 * @param appUpdateRequest appUpdateRequest
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/update")
 	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+	@Transactional(rollbackFor = Exception.class)
 	public BaseResponse<Boolean> updateApp(@RequestBody AppUpdateRequest appUpdateRequest) {
 		if (appUpdateRequest == null || appUpdateRequest.getId() <= 0) {
 			throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -122,6 +126,9 @@ public class AppController {
 		long id = appUpdateRequest.getId();
 		App oldApp = appService.getById(id);
 		ThrowUtils.throwIf(oldApp == null, ErrorCode.NOT_FOUND_ERROR);
+		// 修改审核状态为待审核
+		app.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
+		app.setReviewMessage("");
 		// 操作数据库
 		boolean result = appService.updateById(app);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
@@ -131,8 +138,8 @@ public class AppController {
 	/**
 	 * 根据 id 获取应用（封装类）
 	 *
-	 * @param id
-	 * @return
+	 * @param id id
+	 * @return BaseResponse<AppVO>
 	 */
 	@GetMapping("/get/vo")
 	public BaseResponse<AppVO> getAppVOById(long id, HttpServletRequest request) {
@@ -147,8 +154,8 @@ public class AppController {
 	/**
 	 * 分页获取应用列表（仅管理员可用）
 	 *
-	 * @param appQueryRequest
-	 * @return
+	 * @param appQueryRequest appQueryRequest
+	 * @return BaseResponse<Page < App>>
 	 */
 	@PostMapping("/list/page")
 	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -164,9 +171,9 @@ public class AppController {
 	/**
 	 * 分页获取应用列表（封装类）
 	 *
-	 * @param appQueryRequest
-	 * @param request
-	 * @return
+	 * @param appQueryRequest appQueryRequest
+	 * @param request         request
+	 * @return BaseResponse<Page < AppVO>>
 	 */
 	@PostMapping("/list/page/vo")
 	public BaseResponse<Page<AppVO>> listAppVOByPage(@RequestBody AppQueryRequest appQueryRequest,
@@ -186,9 +193,9 @@ public class AppController {
 	/**
 	 * 分页获取当前登录用户创建的应用列表
 	 *
-	 * @param appQueryRequest
-	 * @param request
-	 * @return
+	 * @param appQueryRequest appQueryRequest
+	 * @param request         request
+	 * @return BaseResponse<Page < AppVO>>
 	 */
 	@PostMapping("/my/list/page/vo")
 	public BaseResponse<Page<AppVO>> listMyAppVOByPage(@RequestBody AppQueryRequest appQueryRequest,
@@ -211,9 +218,9 @@ public class AppController {
 	/**
 	 * 编辑应用（给用户使用）
 	 *
-	 * @param appEditRequest
-	 * @param request
-	 * @return
+	 * @param appEditRequest appEditRequest
+	 * @param request        request
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/edit")
 	public BaseResponse<Boolean> editApp(@RequestBody AppEditRequest appEditRequest, HttpServletRequest request) {
@@ -237,6 +244,9 @@ public class AppController {
 		if (!oldApp.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
 			throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
 		}
+		// 修改审核状态为待审核
+		app.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
+		app.setReviewMessage("");
 		// 操作数据库
 		boolean result = appService.updateById(app);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
@@ -248,9 +258,9 @@ public class AppController {
 	/**
 	 * 应用审核
 	 *
-	 * @param reviewRequest
-	 * @param request
-	 * @return
+	 * @param reviewRequest reviewRequest
+	 * @param request       request
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/review")
 	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
