@@ -55,10 +55,10 @@ mybatis-plus:
 # 对象存储
 cos:
   client:
-    accessKey: ${popcorn.cos.client.accessKey}
-    secretKey: ${popcorn.cos.client.secretKey}
-    region: ${popcorn.cos.client.region}
-    bucket: ${popcorn.cos.client.bucket}
+    accessKey: ${answer.cos.client.accessKey}
+    secretKey: ${answer.cos.client.secretKey}
+    region: ${answer.cos.client.region}
+    bucket: ${answer.cos.client.bucket}
 
 
 # 接口文档配置
@@ -69,13 +69,13 @@ knife4j:
     version: 1.0
     description: "StephenQiu的接口文档信息。"
     concat: "Stephen Qiu"
-    email: "popcornqhd@gmail.com"
+    email: "answerqhd@gmail.com"
     url: "https://github.com/Stephenqhd30"
     group:
       default:
         api-rule: package
         api-rule-resources:
-          - com.stephen.popcorn.controller
+          - com.stephen.answer.controller
 
 
 
