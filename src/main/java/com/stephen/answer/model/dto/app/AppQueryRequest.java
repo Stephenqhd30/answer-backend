@@ -14,6 +14,10 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class AppQueryRequest extends PageRequest implements Serializable {
+    /**
+     * 需要过略的字段(过略掉审核通过的应用)
+     */
+    private Integer notId;
     
     /**
      * id

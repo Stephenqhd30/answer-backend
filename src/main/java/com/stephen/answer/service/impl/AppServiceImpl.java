@@ -94,6 +94,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 			return queryWrapper;
 		}
 		// todo 从对象中取值
+		Integer notId = appQueryRequest.getNotId();
 		Long id = appQueryRequest.getId();
 		String appName = appQueryRequest.getAppName();
 		String appDesc = appQueryRequest.getAppDesc();
@@ -119,6 +120,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 		queryWrapper.like(StringUtils.isNotBlank(appDesc), "appDesc", appDesc);
 		queryWrapper.like(StringUtils.isNotBlank(reviewMessage), "reviewMessage", reviewMessage);
 		// 精确查询
+		queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "reviewStatus", notId);
 		queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
 		queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
 		queryWrapper.eq(ObjectUtils.isNotEmpty(reviewerId), "reviewerId", reviewerId);
@@ -137,9 +139,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 	/**
 	 * 获取应用封装
 	 *
-	 * @param app
-	 * @param request
-	 * @return
+	 * @param app     app
+	 * @param request request
+	 * @return {@link AppVO}
 	 */
 	@Override
 	public AppVO getAppVO(App app, HttpServletRequest request) {
@@ -163,9 +165,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 	/**
 	 * 分页获取应用封装
 	 *
-	 * @param appPage
-	 * @param request
-	 * @return
+	 * @param appPage appPage
+	 * @param request request
+	 * @return {@link Page}<{@link AppVO}>
 	 */
 	@Override
 	public Page<AppVO> getAppVOPage(Page<App> appPage, HttpServletRequest request) {

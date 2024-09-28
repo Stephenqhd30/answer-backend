@@ -128,7 +128,9 @@ public class AppController {
 		ThrowUtils.throwIf(oldApp == null, ErrorCode.NOT_FOUND_ERROR);
 		// 修改审核状态为待审核
 		app.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
-		app.setReviewMessage("");
+		app.setReviewMessage("更新应用之后需要重新审核");
+		app.setReviewerId(null);
+		app.setReviewTime(new Date());
 		// 操作数据库
 		boolean result = appService.updateById(app);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
@@ -246,7 +248,9 @@ public class AppController {
 		}
 		// 修改审核状态为待审核
 		app.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
-		app.setReviewMessage("");
+		app.setReviewMessage("更新应用之后需要重新审核");
+		app.setReviewerId(null);
+		app.setReviewTime(new Date());
 		// 操作数据库
 		boolean result = appService.updateById(app);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
