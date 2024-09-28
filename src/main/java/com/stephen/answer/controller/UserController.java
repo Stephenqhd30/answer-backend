@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 import static com.stephen.answer.constant.SaltConstant.SALT;
@@ -133,6 +134,7 @@ public class UserController {
 		}
 		User user = new User();
 		BeanUtils.copyProperties(userAddRequest, user);
+		userService.validUser(user, true);
 		// 默认密码 12345678
 		String encryptPassword = DigestUtils.md5DigestAsHex((SALT + DEFAULT_PASSWORD).getBytes());
 		// 设置一个默认的头像
@@ -163,18 +165,32 @@ public class UserController {
 	/**
 	 * 更新用户
 	 *
-	 * @param userUpdateRequest
-	 * @param request
-	 * @return
+	 * @param userUpdateRequest userUpdateRequest
+	 * @param request           request
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/update")
 	public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest,
 	                                        HttpServletRequest request) {
-		if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
+		if (userUpdateRequest == null || userUpdateRequest.getId() <= 0) {
 			throw new BusinessException(ErrorCode.PARAMS_ERROR);
 		}
+		// todo 在此处将实体类和 DTO 进行转换
 		User user = new User();
 		BeanUtils.copyProperties(userUpdateRequest, user);
+		// 数据校验
+		userService.validUser(user, false);
+		// 判断是否存在
+		long id = userUpdateRequest.getId();
+		User oldUser = userService.getById(id);
+		ThrowUtils.throwIf(oldUser == null, ErrorCode.NOT_FOUND_ERROR);
+		// 如果用户需要修改密码
+		if (StringUtils.isNotBlank(userUpdateRequest.getUserPassword())) {
+			// todo 密码加密
+			String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userUpdateRequest.getUserPassword()).getBytes());
+			user.setUserPassword(encryptPassword);
+		}
+		// 操作数据库
 		boolean result = userService.updateById(user);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
 		return ResultUtils.success(true);
@@ -183,9 +199,9 @@ public class UserController {
 	/**
 	 * 根据 id 获取用户（仅管理员）
 	 *
-	 * @param id 用户id
+	 * @param id      用户id
 	 * @param request request
-	 * @return
+	 * @return {@link BaseResponse<User>}
 	 */
 	@GetMapping("/get")
 	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -201,9 +217,9 @@ public class UserController {
 	/**
 	 * 根据 id 获取包装类
 	 *
-	 * @param id 用户id
+	 * @param id      用户id
 	 * @param request request
-	 * @return 查询得到的用户包装类
+	 * @return BaseResponse<UserVO>
 	 */
 	@GetMapping("/get/vo")
 	public BaseResponse<UserVO> getUserVOById(long id, HttpServletRequest request) {
@@ -215,9 +231,9 @@ public class UserController {
 	/**
 	 * 分页获取用户列表（仅管理员）
 	 *
-	 * @param userQueryRequest
-	 * @param request
-	 * @return
+	 * @param userQueryRequest userQueryRequest
+	 * @param request          request
+	 * @return BaseResponse<Page < User>>
 	 */
 	@PostMapping("/list/page")
 	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -234,8 +250,8 @@ public class UserController {
 	 * 分页获取用户封装列表
 	 *
 	 * @param userQueryRequest 用户查询请求
-	 * @param request request
-	 * @return
+	 * @param request          request
+	 * @return BaseResponse<Page < UserVO>>
 	 */
 	@PostMapping("/list/page/vo")
 	public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest,
@@ -260,19 +276,26 @@ public class UserController {
 	/**
 	 * 更新个人信息
 	 *
-	 * @param userUpdateMyRequest
-	 * @param request
-	 * @return
+	 * @param userEditRequest userEditRequest
+	 * @param request         request
+	 * @return BaseResponse<Boolean>
 	 */
 	@PostMapping("/update/my")
-	public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
+	public BaseResponse<Boolean> updateMyUser(@RequestBody UserEditRequest userEditRequest,
 	                                          HttpServletRequest request) {
-		if (userUpdateMyRequest == null) {
-			throw new BusinessException(ErrorCode.PARAMS_ERROR);
-		}
+		ThrowUtils.throwIf(userEditRequest == null, ErrorCode.PARAMS_ERROR);
 		User loginUser = userService.getLoginUser(request);
+		// todo 在此处将实体类和 DTO 进行转换
 		User user = new User();
-		BeanUtils.copyProperties(userUpdateMyRequest, user);
+		BeanUtils.copyProperties(userEditRequest, user);
+		// 对用户数据进行校验
+		userService.validUser(user, false);
+		// 如果用户需要修改密码
+		if (StringUtils.isNotBlank(userEditRequest.getUserPassword())) {
+			// todo 密码加密
+			String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userEditRequest.getUserPassword()).getBytes());
+			user.setUserPassword(encryptPassword);
+		}
 		user.setId(loginUser.getId());
 		boolean result = userService.updateById(user);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);

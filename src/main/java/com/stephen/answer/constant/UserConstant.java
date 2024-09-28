@@ -20,7 +20,7 @@ public interface UserConstant {
 	/**
 	 * 用户默认头像地址
 	 */
-	String USER_AVATAR = "https://butterfly-1318299170.cos.ap-shanghai.myqcloud.com/Images/Blog/Avatar/avatar.webp";
+	String USER_AVATAR = "https://butterfly-1318299170.cos.ap-shanghai.myqcloud.com/logo/avatar/default_avatar.png";
 	
 	
 	//  region 权限

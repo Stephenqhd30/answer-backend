@@ -10,13 +10,18 @@ import java.io.Serializable;
  * @author stephen qiu
  */
 @Data
-public class UserUpdateMyRequest implements Serializable {
+public class UserEditRequest implements Serializable {
 	
 	private static final long serialVersionUID = 402901746420005392L;
 	/**
 	 * 用户昵称
 	 */
 	private String userName;
+	
+	/**
+	 * 用户密码
+	 */
+	private String userPassword;
 	
 	/**
 	 * 用户头像

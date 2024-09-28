@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.stephen.answer.common.ErrorCode;
 import com.stephen.answer.constant.CommonConstant;
+import com.stephen.answer.constant.SaltConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.mapper.UserMapper;
 import com.stephen.answer.model.dto.user.UserQueryRequest;
@@ -13,8 +14,11 @@ import com.stephen.answer.model.enums.UserRoleEnum;
 import com.stephen.answer.model.vo.LoginUserVO;
 import com.stephen.answer.model.vo.UserVO;
 import com.stephen.answer.service.UserService;
+import com.stephen.answer.utils.RegexUtils;
 import com.stephen.answer.utils.SqlUtils;
+import com.stephen.answer.utils.ThrowUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,50 @@ import static com.stephen.answer.constant.UserConstant.USER_LOGIN_STATE;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+	
+	/**
+	 * 校验数据
+	 *
+	 * @param user user
+	 * @param add  对创建的数据进行校验
+	 */
+	@Override
+	public void validUser(User user, boolean add) {
+		ThrowUtils.throwIf(user == null, ErrorCode.PARAMS_ERROR);
+		// todo 从对象中取值
+		String userAccount = user.getUserAccount();
+		String userPassword = user.getUserPassword();
+		String userName = user.getUserName();
+		String userProfile = user.getUserProfile();
+		String userEmail = user.getUserEmail();
+		String userPhone = user.getUserPhone();
+		
+		// 创建数据时，参数不能为空
+		if (add) {
+			// todo 补充校验规则
+			ThrowUtils.throwIf(StringUtils.isBlank(userAccount), ErrorCode.PARAMS_ERROR, "账号不能为空");
+			ThrowUtils.throwIf(StringUtils.isBlank(userName), ErrorCode.PARAMS_ERROR, "用户名不能为空");
+		}
+		// 修改数据时，有参数则校验
+		// todo 补充校验规则
+		if (StringUtils.isNotBlank(userAccount)) {
+			ThrowUtils.throwIf(userAccount.length() < 4 || userAccount.length() > 20, ErrorCode.PARAMS_ERROR, "账号不能小于4位，不能多于20位");
+		}
+		if (StringUtils.isNotBlank(userProfile)) {
+			ThrowUtils.throwIf(userProfile.length() > 50, ErrorCode.PARAMS_ERROR, "用户简介不能多余50字");
+		}
+		if (StringUtils.isNotBlank(userEmail)) {
+			ThrowUtils.throwIf(!RegexUtils.checkEmail(userEmail), ErrorCode.PARAMS_ERROR, "用户邮箱有误");
+		}
+		if (StringUtils.isNotBlank(userPhone)) {
+			ThrowUtils.throwIf(!RegexUtils.checkMobile(userPhone), ErrorCode.PARAMS_ERROR, "用户手机号码有误");
+		}
+		if (StringUtils.isNotBlank(userPassword)) {
+			String digest = DigestUtils.md5DigestAsHex((SaltConstant.SALT + userPassword).getBytes());
+			String oldUserPassword = this.getById(user.getId()).getUserPassword();
+			ThrowUtils.throwIf(!digest.equals(oldUserPassword), ErrorCode.PARAMS_ERROR, "密码不正确");
+		}
+	}
 	
 	@Override
 	public long userRegister(String userAccount, String userPassword, String checkPassword) {

@@ -17,8 +17,16 @@ import java.util.List;
  * 
  */
 public interface UserService extends IService<User> {
-
+    
     /**
+     * 校验数据
+     *
+     * @param user user
+     * @param add  对创建的数据进行校验
+     */
+	void validUser(User user, boolean add);
+	
+	/**
      * 用户注册
      *
      * @param userAccount   用户账户

@@ -61,7 +61,8 @@ public class FileController {
 		// 文件目录：根据业务、用户来划分
 		String uuid = RandomStringUtils.randomAlphanumeric(8);
 		String filename = uuid + "-" + multipartFile.getOriginalFilename();
-		String filepath = String.format("/%s/%s/%s", fileUploadBizEnum.getValue(), loginUser.getId(), filename);
+		// todo: 修改文件上床的路径
+		String filepath = String.format("/%s/%s/%s/%s", "answer", fileUploadBizEnum.getValue(), loginUser.getId(), filename);
 		File file = null;
 		try {
 			// 上传文件
