@@ -6,6 +6,7 @@ import com.stephen.answer.common.BaseResponse;
 import com.stephen.answer.common.DeleteRequest;
 import com.stephen.answer.common.ErrorCode;
 import com.stephen.answer.common.ReviewRequest;
+import com.stephen.answer.constant.AppConstant;
 import com.stephen.answer.constant.UserConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.model.dto.app.AppAddRequest;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * 应用接口
@@ -67,6 +69,7 @@ public class AppController {
 		// todo 填充默认值
 		User loginUser = userService.getLoginUser(request);
 		app.setUserId(loginUser.getId());
+		app.setAppIcon(Optional.ofNullable(app.getAppIcon()).orElse(AppConstant.APP_ICON));
 		app.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
 		// 写入数据库
 		boolean result = appService.save(app);

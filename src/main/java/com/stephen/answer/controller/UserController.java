@@ -5,6 +5,7 @@ import com.stephen.answer.annotation.AuthCheck;
 import com.stephen.answer.common.BaseResponse;
 import com.stephen.answer.common.DeleteRequest;
 import com.stephen.answer.common.ErrorCode;
+import com.stephen.answer.constant.SaltConstant;
 import com.stephen.answer.constant.UserConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.model.dto.user.*;
@@ -22,12 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
-
-import static com.stephen.answer.constant.SaltConstant.SALT;
-import static com.stephen.answer.constant.UserConstant.DEFAULT_PASSWORD;
-import static com.stephen.answer.constant.UserConstant.USER_AVATAR;
+import java.util.Optional;
 
 
 /**
@@ -136,10 +133,10 @@ public class UserController {
 		BeanUtils.copyProperties(userAddRequest, user);
 		userService.validUser(user, true);
 		// 默认密码 12345678
-		String encryptPassword = DigestUtils.md5DigestAsHex((SALT + DEFAULT_PASSWORD).getBytes());
+		String encryptPassword = DigestUtils.md5DigestAsHex((SaltConstant.SALT + UserConstant.DEFAULT_PASSWORD).getBytes());
 		// 设置一个默认的头像
 		user.setUserPassword(encryptPassword);
-		user.setUserAvatar(USER_AVATAR);
+		user.setUserAvatar(Optional.ofNullable(user.getUserAvatar()).orElse(UserConstant.USER_AVATAR));
 		boolean result = userService.save(user);
 		ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
 		return ResultUtils.success(user.getId());
@@ -187,7 +184,7 @@ public class UserController {
 		// 如果用户需要修改密码
 		if (StringUtils.isNotBlank(userUpdateRequest.getUserPassword())) {
 			// todo 密码加密
-			String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userUpdateRequest.getUserPassword()).getBytes());
+			String encryptPassword = DigestUtils.md5DigestAsHex((SaltConstant.SALT + userUpdateRequest.getUserPassword()).getBytes());
 			user.setUserPassword(encryptPassword);
 		}
 		// 操作数据库
@@ -293,7 +290,7 @@ public class UserController {
 		// 如果用户需要修改密码
 		if (StringUtils.isNotBlank(userEditRequest.getUserPassword())) {
 			// todo 密码加密
-			String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userEditRequest.getUserPassword()).getBytes());
+			String encryptPassword = DigestUtils.md5DigestAsHex((SaltConstant.SALT + userEditRequest.getUserPassword()).getBytes());
 			user.setUserPassword(encryptPassword);
 		}
 		user.setId(loginUser.getId());
