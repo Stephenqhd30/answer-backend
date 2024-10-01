@@ -1,5 +1,6 @@
 package com.stephen.answer.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.stephen.answer.annotation.AuthCheck;
 import com.stephen.answer.common.BaseResponse;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -282,10 +284,10 @@ public class AppController {
 		// 校验
 		ThrowUtils.throwIf(id == null || reviewStatusEnum == null, ErrorCode.PARAMS_ERROR);
 		// 判断app是否存在
-		App odaApp = appService.getById(id);
-		ThrowUtils.throwIf(odaApp == null, ErrorCode.NOT_FOUND_ERROR);
+		App oldApp = appService.getById(id);
+		ThrowUtils.throwIf(oldApp == null, ErrorCode.NOT_FOUND_ERROR);
 		// 判断是否已经审核
-		ThrowUtils.throwIf(odaApp.getReviewStatus().equals(reviewStatus), ErrorCode.PARAMS_ERROR, "请勿重复审核");
+		ThrowUtils.throwIf(oldApp.getReviewStatus().equals(reviewStatus), ErrorCode.PARAMS_ERROR, "请勿重复审核");
 		// 更新审核状态
 		User loginUser = userService.getLoginUser(request);
 		App app = new App();
@@ -299,4 +301,43 @@ public class AppController {
 		return ResultUtils.success(true);
 	}
 	
+	
+	/**
+	 * 批量应用审核
+	 *
+	 * @param reviewRequest reviewRequest
+	 * @param request       request
+	 * @return BaseResponse<Boolean>
+	 */
+	@PostMapping("/review/batch")
+	@AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+	@Transactional(rollbackFor = Exception.class)
+	public BaseResponse<Boolean> doAppReviewByBatch(@RequestBody ReviewRequest reviewRequest, HttpServletRequest request) {
+		ThrowUtils.throwIf(reviewRequest == null, ErrorCode.PARAMS_ERROR);
+		// 取出来请求中需要的属性
+		String reviewMessage = reviewRequest.getReviewMessage();
+		Integer reviewStatus = reviewRequest.getReviewStatus();
+		String idList = reviewRequest.getIdList();
+		List<Long> list = JSONUtil.toList(idList, Long.class);
+		if (!list.isEmpty()) {
+			for (Long id : list) {
+				// 判断app是否存在
+				App oldApp = appService.getById(id);
+				ThrowUtils.throwIf(oldApp == null, ErrorCode.NOT_FOUND_ERROR);
+				// 判断是否已经审核
+				ThrowUtils.throwIf(oldApp.getReviewStatus().equals(reviewStatus), ErrorCode.PARAMS_ERROR, "请勿重复审核");
+				App app = new App();
+				// 更新审核状态
+				User loginUser = userService.getLoginUser(request);
+				app.setId(id);
+				app.setReviewStatus(ReviewStatusEnum.PASS.getValue());
+				app.setReviewMessage(reviewMessage);
+				app.setReviewerId(loginUser.getId());
+				app.setReviewTime(new Date());
+				boolean result = appService.updateById(app);
+				ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+			}
+		}
+		return ResultUtils.success(true);
+	}
 }

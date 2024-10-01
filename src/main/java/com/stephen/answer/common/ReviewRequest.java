@@ -3,6 +3,7 @@ package com.stephen.answer.common;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: stephen qiu
@@ -28,4 +29,10 @@ public class ReviewRequest implements Serializable {
 	 * 审核信息
 	 */
 	private String reviewMessage;
+	
+	
+	/**
+	 * 使用JSON字符串类型来接收批量审核的 id 列表
+	 */
+	private String idList;
 }
