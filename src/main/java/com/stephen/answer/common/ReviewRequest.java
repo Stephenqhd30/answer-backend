@@ -3,7 +3,6 @@ package com.stephen.answer.common;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author: stephen qiu
