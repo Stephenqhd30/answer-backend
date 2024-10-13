@@ -6,7 +6,7 @@ import com.stephen.answer.annotation.AuthCheck;
 import com.stephen.answer.common.BaseResponse;
 import com.stephen.answer.common.DeleteRequest;
 import com.stephen.answer.common.ErrorCode;
-import com.stephen.answer.constant.UserConstant;
+import com.stephen.answer.constants.UserConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.model.dto.userAnswer.UserAnswerAddRequest;
 import com.stephen.answer.model.dto.userAnswer.UserAnswerEditRequest;

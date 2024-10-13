@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.stephen.answer.common.ErrorCode;
-import com.stephen.answer.constant.CommonConstant;
+import com.stephen.answer.constants.CommonConstant;
 import com.stephen.answer.mapper.UserAnswerMapper;
 import com.stephen.answer.model.dto.userAnswer.UserAnswerQueryRequest;
 import com.stephen.answer.model.entity.App;

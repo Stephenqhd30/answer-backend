@@ -1,6 +1,6 @@
 package com.stephen.answer.common;
 
-import com.stephen.answer.constant.CommonConstant;
+import com.stephen.answer.constants.CommonConstant;
 import lombok.Data;
 
 /**

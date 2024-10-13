@@ -6,7 +6,7 @@ import com.stephen.answer.annotation.AuthCheck;
 import com.stephen.answer.common.BaseResponse;
 import com.stephen.answer.common.DeleteRequest;
 import com.stephen.answer.common.ErrorCode;
-import com.stephen.answer.constant.UserConstant;
+import com.stephen.answer.constants.UserConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.model.dto.scoringResult.ScoringResultAddRequest;
 import com.stephen.answer.model.dto.scoringResult.ScoringResultEditRequest;

@@ -1,4 +1,4 @@
-package com.stephen.answer.constant;
+package com.stephen.answer.constants;
 
 /**
  * 文件常量

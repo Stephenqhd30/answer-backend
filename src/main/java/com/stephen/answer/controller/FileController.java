@@ -3,7 +3,7 @@ package com.stephen.answer.controller;
 import cn.hutool.core.io.FileUtil;
 import com.stephen.answer.common.BaseResponse;
 import com.stephen.answer.common.ErrorCode;
-import com.stephen.answer.constant.FileConstant;
+import com.stephen.answer.constants.FileConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.manager.CosManager;
 import com.stephen.answer.model.dto.file.UploadFileRequest;

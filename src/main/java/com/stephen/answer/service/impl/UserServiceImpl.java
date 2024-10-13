@@ -4,8 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.stephen.answer.common.ErrorCode;
-import com.stephen.answer.constant.CommonConstant;
-import com.stephen.answer.constant.SaltConstant;
+import com.stephen.answer.constants.CommonConstant;
+import com.stephen.answer.constants.SaltConstant;
 import com.stephen.answer.exception.BusinessException;
 import com.stephen.answer.mapper.UserMapper;
 import com.stephen.answer.model.dto.user.UserQueryRequest;
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.stephen.answer.constant.SaltConstant.SALT;
-import static com.stephen.answer.constant.UserConstant.USER_AVATAR;
-import static com.stephen.answer.constant.UserConstant.USER_LOGIN_STATE;
+import static com.stephen.answer.constants.SaltConstant.SALT;
+import static com.stephen.answer.constants.UserConstant.USER_AVATAR;
+import static com.stephen.answer.constants.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务实现
