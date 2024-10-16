@@ -214,7 +214,7 @@ public class AppController {
 		long current = appQueryRequest.getCurrent();
 		long size = appQueryRequest.getPageSize();
 		// 限制爬虫
-		ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+		ThrowUtils.throwIf(size > 50, ErrorCode.PARAMS_ERROR);
 		// 查询数据库
 		Page<App> appPage = appService.page(new Page<>(current, size),
 				appService.getQueryWrapper(appQueryRequest));

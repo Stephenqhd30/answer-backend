@@ -198,7 +198,7 @@ public class QuestionController {
 		long current = questionQueryRequest.getCurrent();
 		long size = questionQueryRequest.getPageSize();
 		// 限制爬虫
-		ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+		ThrowUtils.throwIf(size > 50, ErrorCode.PARAMS_ERROR);
 		// 查询数据库
 		Page<Question> questionPage = questionService.page(new Page<>(current, size),
 				questionService.getQueryWrapper(questionQueryRequest));
